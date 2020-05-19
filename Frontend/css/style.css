@@ -1,0 +1,172 @@
+font-family: 'Aladin', cursive;
+font-family: 'Roboto', sans-serif;
+
+/* algemene styling */
+* {
+    padding: 0px;
+    margin: 0px;
+}
+body {
+    margin: 0px;
+}
+h1, h2, h3, h4, h5 {
+    font-family: 'Aladin', cursive;
+    color: #E41E26;
+    margin-bottom: 0px;
+}
+p {
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    font-size: 16px;
+    margin-top: 5px;
+}
+li{
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+main {
+    padding-top: 95px;
+    padding-bottom: 75px;
+}
+
+/* styling van de buttons */
+button {
+    background-color: #E41E26; 
+    border-radius: 20px;
+    border: none;  
+    -webkit-box-shadow: 3px 4px 0px 0px rgba(188,32,39,1);
+    -moz-box-shadow: 3px 4px 0px 0px rgba(188,32,39,1);
+    box-shadow: 3px 4px 0px 0px rgba(188,32,39,1); 
+    padding: 5px 15px;
+}
+ button:hover {
+    box-shadow: none;
+}
+ button a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+}
+
+/* styling van het startscreen  */
+body .startscreen {
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.startscreen h1 {
+    font-size: 64px;
+}
+
+/* Styling van de header */
+header {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+    background-color: black;
+    position: fixed;
+    z-index: 100;
+}
+header p {
+    font-size: 36px;
+    font-family: 'Aladin', cursive;
+    color: #E41E26;
+    margin-left: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+header img {
+    height: 50px;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+/* styling van de profiel blokken */
+.profile-block {
+    background-color: black;
+    margin-bottom: 15px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    -webkit-box-shadow: 10px 10px 5px -5px rgba(142,142,142,1);
+    -moz-box-shadow: 10px 10px 5px -5px rgba(142,142,142,1);
+    box-shadow: 10px 10px 5px -5px rgba(142,142,142,1);
+}
+.profile-block img {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 20px;
+}
+
+/* styling van de menubalk onderin (footer) */
+footer {
+    width: 100%;
+    display: flex;
+    position: fixed;
+    bottom: 0px;
+}
+footer .menu-item {
+    width: calc(100%/3);
+    height: 60px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+footer .menu-item:hover {
+    background-color: #282828;
+}
+footer .menu-item img {
+    height: 30px;
+}
+
+/* styling van de profielpagina */
+.profile .information img {
+    width: 100%;
+}
+.profile p {
+    color: black;
+}
+.profile ul {
+    margin: 0px;
+    padding-left: 20px;
+}
+.profile button {
+    width: 100%;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+}
+.profile .information button img {
+    width: 30px;
+    height: auto;
+    margin: 5px 0px 5px 15px;
+}
+
+/* styling calculating page */
+.calculate-match {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.calculate-match img {
+    height: 200px;
+    width: auto;
+    margin-top: 30px;
+}
+
+.calculate-match p {
+    color: black;
+    font-size: 36px;
+}
