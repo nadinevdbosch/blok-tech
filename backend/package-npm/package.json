@@ -1,0 +1,14 @@
+{
+  "name": "camel-case-generator",
+  "version": "1.0.0",
+  "description": "Zorgt ervoor dat de tekst in camel case komt te staan",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nadine",
+  "license": "ISC",
+  "dependencies": {
+    "camelcase": "^6.0.0"
+  }
+}
