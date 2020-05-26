@@ -1,0 +1,16 @@
+{
+  "name": "query-opdracht",
+  "version": "1.0.0",
+  "description": "Mijn uitwerking van de query-opdracht",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "Nadine",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^4.0.4",
+    "nodemon": "^2.0.4"
+  }
+}

@@ -1,0 +1,14 @@
+body {
+    background-color: black;
+}
+
+h1 {
+    color: yellow;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 64px;
+}
+
+p {
+    color: yellow;
+    font-family: sans-serif, Arial, Helvetica;
+}
