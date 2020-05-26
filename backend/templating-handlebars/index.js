@@ -13,7 +13,7 @@ app.use(express.static('static'));
 // app.locals.layout = false;
 
 //routing
-app.get('/home', (req, res) => {
+app.get('/', (req, res) => {
     res.render('index', { 
         title: 'Home'
     });
