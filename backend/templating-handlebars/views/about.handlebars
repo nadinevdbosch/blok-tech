@@ -1,2 +1,12 @@
+{{> header}}
+
 <h1>something about us</h1>
-<p>welcome to my about-page</p>
+
+{{#if displayName}}
+    <p>Mijn naam is {{ name }}</p>
+
+    {{else}}
+    <p>Er is geen naam gevonden</p>
+
+{{/if}}
+

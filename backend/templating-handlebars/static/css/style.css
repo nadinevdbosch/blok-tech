@@ -12,3 +12,8 @@ p {
     color: yellow;
     font-family: sans-serif, Arial, Helvetica;
 }
+
+h2 {
+    width: 100%;
+    background-color: red;
+}
