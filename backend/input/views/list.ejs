@@ -1,0 +1,12 @@
+<%- include ('includes/head.ejs') %>
+<%- include ('includes/header.ejs') %>
+
+<h1>Profielen</h1>
+<% for (var index = 0; index < dataProfiles.length; index++) { %>
+<h2><a href="/profiles/<%= dataProfiles[index].naam %>"><%= dataProfiles[index].naam %></a></h2>
+<p><%= dataProfiles[index].bio %></p>
+<% } %>
+
+<button><a href="/add-profile">Voeg een profiel toe</a></button>
+
+<%- include ('includes/footer.ejs') %>
