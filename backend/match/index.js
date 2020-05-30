@@ -4,8 +4,16 @@ const find = require('array-find');
 const slug = require('slug');
 const bodyParser = require('body-parser');
 
+require('dotenv').config();
+const mongo = require('mongodb');
+var db = null;
+const url = process.env.mongodbURL;
 
-
+mongo.MongoClient.connect(url, function(err, client) {
+  if (err) throw err
+  db= client.db(process.env.DB_NAME);
+  console.log(process.env.DB_NAME);
+})
 
 express()
     .set('view engine', 'ejs')
@@ -49,6 +57,8 @@ var dataProfiles = [
     }
   ]
 
+  var dataMyProfile = [];
+
   
 function profiles(req, res) {
     res.render('list.ejs', {dataProfiles: dataProfiles})
@@ -73,19 +83,19 @@ function profile(req, res, next) {
 function add(req, res) {
   var naam = slug(req.body.naam)
 
-//  dataMyProfile.push({
-//     naam: naam,
-//     geslacht: req.body.geslacht,
-//     voorkeur: req.body.voorkeur,
-//     leeftijd: req.body.leeftijd,
-//     bio: req.body.bio
-//   })
+ dataMyProfile.push({
+    naam: naam,
+    geslacht: req.body.geslacht,
+    voorkeur: req.body.voorkeur,
+    leeftijd: req.body.leeftijd,
+    bio: req.body.bio
+  })
 
   res.redirect('/quiz-intro')
 }
 
 function myProfile(req, res) {
-  res.render('my-profile')
+  res.render('my-profile', {data: dataMyProfile})
 }
 
 function quizIntro(req, res) {
@@ -97,4 +107,13 @@ function quizQuestion(req, res) {
 }
 
   
+// db.collection('project-tech').insertOne(
+//   {
+//     naam: "Nadine",
+//     geslacht: "vrouw",
+//     voorkeur: "man",
+//     leeftijd: "20",
+//     bio: "mijn naam is Nadine"
+//   }
 
+  console.log(dataMyProfile);
