@@ -14,7 +14,6 @@ const url = process.env.mongodbURL;
 mongo.MongoClient.connect(url, function(err, client) {
   if (err) throw err
   db= client.db(process.env.DB_NAME);
-  console.log(process.env.DB_NAME);
 })
 
 express()
@@ -66,20 +65,6 @@ function profiles(req, res) {
     res.render('list.ejs', {dataProfiles: dataProfiles})
 }
 
-  
-function profile(req, res, next) {
-  var naam = req.params.naam;
-  var profile = find(dataProfiles, function (value) {
-    return value.naam === naam
-  })
-
-  if (!profile) {
-    next()
-    return
-  }
-
-  res.render('detail', {data: profile})
-}
 
 var dataMyProfile;
 
@@ -111,24 +96,33 @@ function quizQuestion(req, res) {
 }
 
 
-var profilesData = [];
-
-// function find(req, res, next) {
-// 	db
-// 		.collection('project-tech')
-// 		.find()
-// 		.toArray(profilesData)
-
-// 	function profilesArray(err, profilesData) {
-// 		if (err) {
-// 			next(err)
-// 		} else {
-// 			res.render('/profiles', { data: profilesData })
-// 		}
-//   }
-//   console.log{profilesData}
-// }
+var dataProfiles = [];
 
 
+function profiles(req, res, next) {
+  db.collection('project-tech').find().toArray(done)
 
+  function done(err, data) {
+    if (err) {
+      next(err)
+    } else {
+      res.render('list', {dataProfiles: data})
+    }
+    dataProfiles = data
+    console.log(data)
+  }
+}
 
+function profile(req, res, next) {
+  var naam = req.params.naam;
+  var profile = find(dataProfiles, function (value) {
+    return value.naam === naam
+  })
+
+  if (!profile) {
+    next()
+    return
+  }
+
+  res.render('detail', {data: profile})
+}
