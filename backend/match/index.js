@@ -110,14 +110,21 @@ function quizQuestion(req, res) {
   res.render('quiz-question')
 }
 
-  
-// db.collection('project-tech').insertOne(
-//   {
-//     naam: "Nadine",
-//     geslacht: "vrouw",
-//     voorkeur: "man",
-//     leeftijd: "20",
-//     bio: "mijn naam is Nadine"
-//   }
+var profilesData = [];
 
+// function find(req, res, next) {
+// 	localDB
+// 		.collection('project-tech')
+// 		.find()
+// 		.toArray(profilesArray)
+
+// 	function profilesArray(err, profilesData) {
+// 		if (err) {
+// 			next(err)
+// 		} else {
+// 			res.render('/profiles', { data: profilesData })
+// 		}
+//   }
+//   console.log{profilesData}
+// }
 
