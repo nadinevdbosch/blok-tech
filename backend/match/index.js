@@ -116,7 +116,7 @@ var profilesData = [];
 // 	localDB
 // 		.collection('project-tech')
 // 		.find()
-// 		.toArray(profilesArray)
+// 		.toArray(profilesData)
 
 // 	function profilesArray(err, profilesData) {
 // 		if (err) {
