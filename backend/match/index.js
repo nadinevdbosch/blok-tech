@@ -3,6 +3,8 @@ const ejs = require('ejs');
 const find = require('array-find');
 const slug = require('slug');
 const bodyParser = require('body-parser');
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 require('dotenv').config();
 const mongo = require('mongodb');
@@ -23,7 +25,7 @@ express()
     .get('/', startscreen)
     .get('/profiles', profiles)
     .get('/my-profile', myProfile)
-    .post('/my-profile', add)
+    .post('/my-profile', upload.single('profielfoto'), add)
     .get('/profiles/:naam', profile)
     .get('/quiz-intro', quizIntro)
     .get('/quiz-question', quizQuestion)
@@ -57,7 +59,7 @@ var dataProfiles = [
     }
   ]
 
-  var dataMyProfile = [];
+
 
   
 function profiles(req, res) {
@@ -76,21 +78,23 @@ function profile(req, res, next) {
     return
   }
 
-  res.render('detail.ejs', {data: profile})
+  res.render('detail', {data: profile})
 }
 
+var dataMyProfile;
 
 function add(req, res) {
   var naam = slug(req.body.naam)
 
- dataMyProfile.push({
+ dataMyProfile = {
     naam: naam,
     geslacht: req.body.geslacht,
     voorkeur: req.body.voorkeur,
     leeftijd: req.body.leeftijd,
-    bio: req.body.bio
-  })
+    bio: req.body.bio,
 
+  }
+  console.log(req.body.profielfoto);
   res.redirect('/quiz-intro')
 }
 
@@ -116,4 +120,4 @@ function quizQuestion(req, res) {
 //     bio: "mijn naam is Nadine"
 //   }
 
-  console.log(dataMyProfile);
+
