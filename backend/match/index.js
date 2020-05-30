@@ -110,10 +110,11 @@ function quizQuestion(req, res) {
   res.render('quiz-question')
 }
 
+
 var profilesData = [];
 
 // function find(req, res, next) {
-// 	localDB
+// 	db
 // 		.collection('project-tech')
 // 		.find()
 // 		.toArray(profilesData)
@@ -127,4 +128,7 @@ var profilesData = [];
 //   }
 //   console.log{profilesData}
 // }
+
+
+
 
