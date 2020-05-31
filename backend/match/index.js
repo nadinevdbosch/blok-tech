@@ -18,11 +18,16 @@ mongo.MongoClient.connect(url, function(err, client) {
 
 // set storage engine
 const storage = multer.diskStorage({ 
-  destination: 'static/uploads/',
+  destination: function (req, file, cb) {
+    cb(null, "static/uploads/"); // location where the uploaded file needs to be stored
+  },
   filename: function(req, file, cb){
+	console.log(file)
     cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
  })
+
+ 
 
 //  Init upload
 const upload = multer({
@@ -82,20 +87,34 @@ function profiles(req, res) {
 
 var dataMyProfile;
 
+// function add(req, res) {
+//   var naam = slug(req.body.naam)
+
+//  dataMyProfile = {
+//     naam: naam,
+//     geslacht: req.body.geslacht,
+//     voorkeur: req.body.voorkeur,
+//     leeftijd: req.body.leeftijd,
+//     bio: req.body.bio,
+
+//   }
+//   console.log(req.body.file)
+//   res.redirect('/quiz-intro')
+// }
+
 function add(req, res) {
   var naam = slug(req.body.naam)
-
- dataMyProfile = {
-    naam: naam,
-    geslacht: req.body.geslacht,
-    voorkeur: req.body.voorkeur,
-    leeftijd: req.body.leeftijd,
-    bio: req.body.bio,
-
+   dataMyProfile = {
+      naam: naam,
+      geslacht: req.body.geslacht,
+      voorkeur: req.body.voorkeur,
+      leeftijd: req.body.leeftijd,
+      bio: req.body.bio,
+      profielfoto: req.file ? req.file.filename : null,
+    }
+   res.redirect('/quiz-intro')
+   console.log(req.file ? req.file.filename : null)
   }
-  console.log(req.body.file)
-  res.redirect('/quiz-intro')
-}
 
 function myProfile(req, res) {
   res.render('my-profile', {data: dataMyProfile})
