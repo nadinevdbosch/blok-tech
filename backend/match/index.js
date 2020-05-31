@@ -4,7 +4,7 @@ const find = require('array-find');
 const slug = require('slug');
 const bodyParser = require('body-parser');
 const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const path = require('path')
 
 require('dotenv').config();
 const mongo = require('mongodb');
@@ -15,6 +15,20 @@ mongo.MongoClient.connect(url, function(err, client) {
   if (err) throw err
   db= client.db(process.env.DB_NAME);
 })
+
+// set storage engine
+const storage = multer.diskStorage({ 
+  destination: 'uploads',
+  filename: function(req, file, cb){
+    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
+ })
+
+//  Init upload
+const upload = multer({
+  storage: storage
+})
+
 
 express()
     .set('view engine', 'ejs')
@@ -34,29 +48,29 @@ function startscreen(req, res) {
     res.render('index')
 }
 
-var dataProfiles = [
-    {
-      naam: 'Nadine',
-      geslacht: 'vrouw',
-      voorkeur:'man',
-      leeftijd: '20',
-      bio: 'Ik ben Nadine, woon in Amsterdam en studeer aan de HvA'
-    },
-    {
-      naam: 'David',
-      geslacht: 'man',
-      voorkeur:'vrouw',
-      leeftijd: '23',
-      bio: 'Ik ben David, woon in Putten en werk als KAM-coördinator'
-    },
-    {
-      naam: 'Gerrit',
-      geslacht: 'man',
-      voorkeur:'vrouw',
-      leeftijd: '51',
-      bio: 'Ik ben Gerrit, woon in Elspeet en werk als software-developer'
-    }
-  ]
+// var dataProfiles = [
+//     {
+//       naam: 'Nadine',
+//       geslacht: 'vrouw',
+//       voorkeur:'man',
+//       leeftijd: '20',
+//       bio: 'Ik ben Nadine, woon in Amsterdam en studeer aan de HvA'
+//     },
+//     {
+//       naam: 'David',
+//       geslacht: 'man',
+//       voorkeur:'vrouw',
+//       leeftijd: '23',
+//       bio: 'Ik ben David, woon in Putten en werk als KAM-coördinator'
+//     },
+//     {
+//       naam: 'Gerrit',
+//       geslacht: 'man',
+//       voorkeur:'vrouw',
+//       leeftijd: '51',
+//       bio: 'Ik ben Gerrit, woon in Elspeet en werk als software-developer'
+//     }
+//   ]
 
 
 
@@ -79,7 +93,7 @@ function add(req, res) {
     bio: req.body.bio,
 
   }
-  console.log(req.body.profielfoto);
+  console.log(req.body.file)
   res.redirect('/quiz-intro')
 }
 
@@ -102,15 +116,15 @@ var dataProfiles = [];
 function profiles(req, res, next) {
   db.collection('project-tech').find().toArray(done)
 
-  function done(err, data) {
+  function done(err, profilesData) {
     if (err) {
       next(err)
     } else {
-      res.render('list', {dataProfiles: data})
+      res.render('list', {data: profilesData})
     }
-    dataProfiles = data
-    console.log(data)
+    dataProfiles = profilesData
   }
+  
 }
 
 function profile(req, res, next) {

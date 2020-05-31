@@ -1,14 +1,14 @@
 <%- include ('includes/head.ejs') %>
 <%- include ('includes/header.ejs') %>
 
-<% for (var index = 0; index < dataProfiles.length; index++) { %>
-<a class="profiel-item-link" href="/profiles/<%= dataProfiles[index].naam %>">
+<% for (var index = 0; index < data.length; index++) { %>
+<a class="profiel-item-link" href="/profiles/<%= data[index].naam %>">
     <div class="profiel-item">
         <div class="profiel-foto">
             <img src="/images/david.png" alt="">
         </div>
         <div class= "profiel-informatie">
-            <h2><%= dataProfiles[index].naam %></h2>
+            <h2><%= data[index].naam %></h2>
             <div class="match-berekening">
                 <p>70%</p>
             </div>
