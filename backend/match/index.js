@@ -18,7 +18,7 @@ mongo.MongoClient.connect(url, function(err, client) {
 
 // set storage engine
 const storage = multer.diskStorage({ 
-  destination: 'uploads',
+  destination: 'static/uploads/',
   filename: function(req, file, cb){
     cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
