@@ -2,6 +2,7 @@
 var hamburger = document.querySelector('.hamburger');
 var cross = document.querySelector('.cross');
 var navigatie = document.querySelector('nav');
+console.log(navigatie);
 
 function active() {
     navigatie.classList.toggle('menu-items-active');

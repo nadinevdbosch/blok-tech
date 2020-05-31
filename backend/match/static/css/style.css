@@ -144,7 +144,7 @@ header > img{
     width: auto;
 }
 
-header img:nth-child(2), header img:nth-child(2) {
+header img:nth-child(2), header img:nth-child(3) {
     position: absolute;
     height: 20px;
     width: auto;
@@ -168,7 +168,7 @@ nav {
     transition: transform 0.5s ease-in;
 }
 
-.menu-active {
+.menu-items-active {
     transform: translateX(0%);
 }
 
