@@ -16,23 +16,29 @@ mongo.MongoClient.connect(url, function(err, client) {
   db= client.db(process.env.DB_NAME);
 })
 
-// set storage engine
-const storage = multer.diskStorage({ 
-  destination: function (req, file, cb) {
-    cb(null, "static/uploads/"); // location where the uploaded file needs to be stored
+
+// const storage = multer.diskStorage({
+// 	destination: (req, file, cb) => {
+// 		cb(null, 'static/uploads');
+// 	},
+// 	filename: (req, file, cb) => {
+// 		cb(null, Date.now() + '.png');
+// 	}
+// });
+// const upload = multer({
+// 	storage: storage
+// });
+
+var uploadFile = multer ({dest: 'static/uploads/'})
+
+const storage = multer.diskStorage({
+  destination:(req, file, cb) => {
+    cb(null,'static/uploads');
   },
-  filename: function(req, file, cb){
-	console.log(file)
-    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '.jpg');
   }
- })
-
- 
-
-//  Init upload
-const upload = multer({
-  storage: storage
-})
+});
 
 
 express()
@@ -41,12 +47,15 @@ express()
     .use(express.static('static'))
     .use(bodyParser.urlencoded({extended: true}))
     .get('/', startscreen)
-    .get('/profiles', profiles)
+    .get('/profiles', profiles) 
     .get('/my-profile', myProfile)
-    .post('/my-profile', upload.single('profielfoto'), add)
+    // .post('/my-profile', upload.single('profielfoto'), add)
+    .post('/my-profile', uploadFile.single('profielfoto'), add, (req, res) => {
+      console.log(req.file);
+      })
     .get('/profiles/:naam', profile)
     .get('/quiz-intro', quizIntro)
-    .get('/quiz-question', quizQuestion)
+    .get('/quiz-question', quiz)
     .listen(3000, () => console.log('listening at localhost:3000'))
 
 function startscreen(req, res) {
@@ -113,6 +122,7 @@ var naam = slug(req.body.naam)
     profielfoto: req.file ? req.file.filename : null,
   }
  res.redirect('/quiz-intro')
+ console.log(req.file)
 }
 
 function myProfile(req, res) {
@@ -132,7 +142,7 @@ var dataProfiles = [];
 
 
 function profiles(req, res, next) {
-  db.collection('project-tech').find().toArray(done)
+  db.collection('users').find().toArray(done)
 
   function done(err, profilesData) {
     if (err) {
@@ -157,4 +167,59 @@ function profile(req, res, next) {
   }
 
   res.render('detail', {data: profile})
+}
+
+
+// function quiz(req, res, next) {
+//   db.collection('questions').find().toArray(questions)
+//   db.collection('Answers').find().toArray(answers)
+//   var dataQuestions
+//   var dataAnswers
+
+
+//   function questions(err, questionData) {
+//     if (err) {
+//       next(err)
+//     } else {
+//       dataQuestions = questionData
+//     }
+    
+//   }
+
+//   function answers(err, answerData) {
+//     if (err) {
+//       next(err)
+//     } else {
+//       dataAnswers = answerData
+//     }
+//   }
+
+//   console.log(dataQuestions)
+// }
+
+var dataQuestions = [];
+var dataAnswers = [];
+
+
+function quiz(req, res, next) {
+  db.collection('questions').find().toArray(questions)
+  db.collection('Answers').find().toArray(answers)
+
+  function questions(err, questionsData) {
+    if (err) {
+      next(err)
+    } else {
+      res.render('quiz-question', {data: questionsData})
+    }
+    dataQuestions = questionsData
+  }
+
+  function answers(err, answersData) {
+    if (err) {
+      next(err)
+    } else {
+      dataAnswers = answersData
+    }
+  }
+  
 }
