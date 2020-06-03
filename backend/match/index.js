@@ -103,18 +103,17 @@ var dataMyProfile;
 // }
 
 function add(req, res) {
-  var naam = slug(req.body.naam)
-   dataMyProfile = {
-      naam: naam,
-      geslacht: req.body.geslacht,
-      voorkeur: req.body.voorkeur,
-      leeftijd: req.body.leeftijd,
-      bio: req.body.bio,
-      profielfoto: req.file ? req.file.filename : null,
-    }
-   res.redirect('/quiz-intro')
-   console.log(req.file ? req.file.filename : null)
+var naam = slug(req.body.naam)
+ dataMyProfile = {
+    naam: naam,
+    geslacht: req.body.geslacht,
+    voorkeur: req.body.voorkeur,
+    leeftijd: req.body.leeftijd,
+    bio: req.body.bio,
+    profielfoto: req.file ? req.file.filename : null,
   }
+ res.redirect('/quiz-intro')
+}
 
 function myProfile(req, res) {
   res.render('my-profile', {data: dataMyProfile})
