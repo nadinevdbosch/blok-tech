@@ -1,4 +1,4 @@
-# Read me
+# MATCH
 
 ![Match header](https://github.com/nadinevdbosch/blok-tech/blob/master/images/readme-header.png)
 
