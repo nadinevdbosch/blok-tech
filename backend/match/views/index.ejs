@@ -1,15 +1,19 @@
- <%- include ('includes/head.ejs') %>
+<%- include ('includes/head.ejs') %>
 
-    <div class="setup">
-      <img src="images/logo1.png" alt="logo van Match" enctype="multipart/form-data">
-      <form action="/my-profile" method="post">
-         <input name="naam" placeholder="Wat is je naam?">
-         <input name="geslacht" placeholder="Ben je een man of een vrouw?">
-         <input name="voorkeur" placeholder="Zoek je een man of een vrouw?">
-         <input name="leeftijd" placeholder="Wat is je leeftijd?">
-         <input name="profielfoto" type="file" accept="image/*">
-         <textarea name="bio" rows="3" placeholder="Schrijf hier een stukje over jezelf"> </textarea>
-         <button>verder</button>
-      </form>
-    </div>
-
+<div class="setup">
+    <img src="images/logo1.png" alt="logo van Match" />
+    <form action="/my-profile" method="post" enctype="multipart/form-data">
+        <input name="naam" placeholder="Wat is je naam?" />
+        <input name="geslacht" placeholder="Ben je een man of een vrouw?" />
+        <input name="voorkeur" placeholder="Zoek je een man of een vrouw?" />
+        <input name="leeftijd" placeholder="Wat is je leeftijd?" />
+        <input name="profielfoto" type="file" accept="image/*" />
+        <textarea
+            name="bio"
+            rows="3"
+            placeholder="Schrijf hier een stukje over jezelf"
+        >
+        </textarea>
+        <button>verder</button>
+    </form>
+</div>
