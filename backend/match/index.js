@@ -17,16 +17,21 @@ mongo.MongoClient.connect(url, function (err, client) {
 });
 
 // MULTER SETUP
-var uploadFile = multer({ dest: "static/uploads/" });
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "static/uploads");
+    destination: function (req, file, cb) {
+        cb(null, "static/uploads/"); // location where the uploaded file needs to be stored
     },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + ".jpg");
+    filename: function (req, file, cb) {
+        console.log(file);
+        cb(
+            null,
+            file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+        );
     },
 });
+
+var uploadFile = multer({ storage: storage });
 
 express()
     .set("view engine", "ejs")
@@ -37,16 +42,14 @@ express()
     .get("/profiles", profiles)
     .get("/my-profile", myProfile)
     .post("/my-profile", uploadFile.single("profielfoto"), add, (req, res) => {
-        console.log(req.file);
+        console.log("het path is");
     })
     .get("/profiles/:naam", profile)
     .get("/quiz-intro", quizIntro)
     .get("/quiz-question", quiz)
+    .get("/question1", questionOne)
     .listen(3000, () => console.log("listening at localhost:3000"));
 
-function startscreen(req, res) {
-    res.render("index");
-}
 
 // var dataProfiles = [
 //     {
@@ -101,11 +104,16 @@ function add(req, res) {
         voorkeur: req.body.voorkeur,
         leeftijd: req.body.leeftijd,
         bio: req.body.bio,
-        profielfoto: req.file ? req.file.filename : null,
+        profielfoto: req.file.filename,
     };
     res.redirect("/quiz-intro");
     console.log(req.file);
 }
+
+function startscreen(req, res) {
+    res.render("index", {data: dataMyProfile});
+}
+
 
 function myProfile(req, res) {
     res.render("my-profile", { data: dataMyProfile });
@@ -171,4 +179,9 @@ function quiz(req, res, next) {
             dataAnswers = answersData;
         }
     }
+}
+
+
+function questionOne(req, res) {
+    res.render("quiz-question");
 }

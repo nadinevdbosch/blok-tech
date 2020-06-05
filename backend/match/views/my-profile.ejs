@@ -1,31 +1,30 @@
-<%- include ('includes/head') %> 
-<%- include ('includes/header') %>
+<%- include ('includes/head') %> <%- include ('includes/header') %>
 
 <div class="profiel-detail-pagina">
     <div class="profiel-top-info">
         <div class="profiel-foto">
-            <img src="/images/david.png" alt="">
+            <img src="/uploads/<%= data.profielfoto %>" alt="profielfoto" />
         </div>
-        <div class= "profiel-informatie">
+        <div class="profiel-informatie">
             <h2><%= data.naam %></h2>
             <div class="match-berekening">
                 <p>70%</p>
+            </div>
         </div>
-    </div>
-
     </div>
     <div class="profiel-item-informatie">
         <p>Geslacht: <%= data.geslacht %></p>
         <p>Leeftijd: <%= data.leeftijd %></p>
         <p>Op zoek naar een: <%= data.voorkeur %></p>
-        <br>
+        <br />
         <p><%= data.bio %></p>
         <p>
             <a href="/profiles/">Terug</a>
-            <a href="#">Like <img src="/images/heart-white.png" alt="Like"></a></p>
+            <a href="#"
+                >Like <img src="/images/heart-white.png" alt="Like"
+            /></a>
+        </p>
     </div>
 </div>
-
-
 
 <%- include ('includes/footer') %>
