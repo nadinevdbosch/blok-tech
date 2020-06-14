@@ -2,16 +2,17 @@
 
    <div class="quiz-questions">
      <img src="images/logo1.png" alt="logo van Match">
-     <form action="/answers">
-        <input type="radio" id="a" name="antwoord" value="a">
-        <label for="a">A</label><br>
-        <input type="radio" id="b" name="antwoord" value="b">
-        <label for="b">B</label><br>
-        <input type="radio" id="c" name="antwoord" value="c">
-        <label for="c">C</label><br>
-        <input type="radio" id="d" name="antwoord" value="d">
-        <label for="d">D</label>
-        <a href="/profiles">verder</a>
+     <p><%= question.question  %></p>
+     <form action="/profiles" method="POST">
+        <input type="radio" id="a" name="answer" value="a">
+        <label for="a"><%= question.answer1  %></label><br>
+        <input type="radio" id="b" name="answer" value="b">
+        <label for="b"><%= question.answer2  %></label><br>
+        <input type="radio" id="c" name="answer" value="c">
+        <label for="c"><%= question.answer3  %></label><br>
+        <input type="radio" id="d" name="answer" value="d">
+        <label for="d"><%= question.answer4  %></label>
+        <button>Verder</button>
      </form>
    </div>
 

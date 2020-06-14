@@ -5,6 +5,7 @@ const slug = require("slug");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
+const session = require("express-session");
 
 require("dotenv").config();
 const mongo = require("mongodb");
@@ -23,7 +24,6 @@ const storage = multer.diskStorage({
         cb(null, "static/uploads/"); // location where the uploaded file needs to be stored
     },
     filename: function (req, file, cb) {
-        console.log(file);
         cb(
             null,
             file.fieldname + "-" + Date.now() + path.extname(file.originalname)
@@ -38,42 +38,32 @@ express()
     .set("views", "views")
     .use(express.static("static"))
     .use(bodyParser.urlencoded({ extended: true }))
-    .get("/", startscreen)
+    .use(session({
+        resave: false,
+        saveUninitialized: true,
+        secret: process.env.SESSION_SECRET
+    }))
     .get("/profiles", profiles)
     .get("/my-profile", myProfile)
-    .post("/my-profile", uploadFile.single("profielfoto"), add, (req, res) => {
-        console.log("het path is");
-    })
+    .get("/", startscreen)
+    .post("/my-profile", uploadFile.single("profielfoto"), add)
+    .post("/profiles", answer)
+    .post("/delete-profile", deleteProfile)
+    .post("/update-profile", uploadFile.single("profielfoto"), update)
+    .get("/my-profile/update", updateProfile)
     .get("/profiles/:naam", profile)
     .get("/quiz-intro", quizIntro)
-    .get("/quiz-question", quiz)
     .get("/question1", questionOne)
+    .get("/question2", questionTwo)
+    .get("/question3", questionThree)
+    .get("/question4", questionFour)
+    .get("/question5", questionFive)
+    .get("/question6", questionSix)
+    .get("/question7", questionSeven)
+    .get("/question8", questionEight)
+    .get("/question9", questionNine)
+    .get("/question10", questionTen)
     .listen(3000, () => console.log("listening at localhost:3000"));
-
-
-// var dataProfiles = [
-//     {
-//       naam: 'Nadine',
-//       geslacht: 'vrouw',
-//       voorkeur:'man',
-//       leeftijd: '20',
-//       bio: 'Ik ben Nadine, woon in Amsterdam en studeer aan de HvA'
-//     },
-//     {
-//       naam: 'David',
-//       geslacht: 'man',
-//       voorkeur:'vrouw',
-//       leeftijd: '23',
-//       bio: 'Ik ben David, woon in Putten en werk als KAM-coördinator'
-//     },
-//     {
-//       naam: 'Gerrit',
-//       geslacht: 'man',
-//       voorkeur:'vrouw',
-//       leeftijd: '51',
-//       bio: 'Ik ben Gerrit, woon in Elspeet en werk als software-developer'
-//     }
-//   ]
 
 function profiles(req, res) {
     res.render("list.ejs", { dataProfiles: dataProfiles });
@@ -81,43 +71,54 @@ function profiles(req, res) {
 
 var dataMyProfile;
 
-// function add(req, res) {
-//   var naam = slug(req.body.naam)
-
-//  dataMyProfile = {
-//     naam: naam,
-//     geslacht: req.body.geslacht,
-//     voorkeur: req.body.voorkeur,
-//     leeftijd: req.body.leeftijd,
-//     bio: req.body.bio,
-
-//   }
-//   console.log(req.body.file)
-//   res.redirect('/quiz-intro')
-// }
-
 function add(req, res) {
-    var naam = slug(req.body.naam);
-    dataMyProfile = {
-        naam: naam,
-        geslacht: req.body.geslacht,
-        voorkeur: req.body.voorkeur,
-        leeftijd: req.body.leeftijd,
-        bio: req.body.bio,
-        profielfoto: req.file.filename,
+    if(req.session.user){
+        res.redirect("/profiles");
+    }else{
+        dataMyProfile = {
+            naam: req.body.naam,
+            geslacht: req.body.geslacht,
+            voorkeur: req.body.voorkeur,
+            leeftijd: req.body.leeftijd,
+            bio: req.body.bio,
+            profielfoto: req.file.filename
     };
+
     res.redirect("/quiz-intro");
-    console.log(req.file);
+
+    }
 }
 
 function startscreen(req, res) {
-    res.render("index", {data: dataMyProfile});
+    res.render("index");
 }
 
+
+// function myProfile(req, res) {
+//     console.log(dataMyProfile)
+//     res.render("my-profile", {
+//         data: dataMyProfile,
+//         profile : req.session.user
+//     });
+// }
 
 function myProfile(req, res) {
-    res.render("my-profile", { data: dataMyProfile });
+    db.collection("users").findOne(
+        {_id: mongo.ObjectID(req.session.user._id)}, done);
+
+    function done(err, profile) {
+        if (err) {
+            next(err);
+        } else {
+            dataMyProfile = profile
+            res.render("my-profile", {
+                data: profile,
+                profile : dataMyProfile
+            });
+        }
+    }
 }
+
 
 function quizIntro(req, res) {
     res.render("quiz-intro");
@@ -130,13 +131,15 @@ function quizQuestion(req, res) {
 var dataProfiles = [];
 
 function profiles(req, res, next) {
-    db.collection("users").find().toArray(done);
+    db.collection("users").find({"geslacht": "man" }).toArray(done);
 
     function done(err, profilesData) {
         if (err) {
             next(err);
         } else {
-            res.render("list", { data: profilesData });
+            res.render("list", {
+                data : profilesData,
+                profile : dataMyProfile });
         }
         dataProfiles = profilesData;
     }
@@ -153,35 +156,245 @@ function profile(req, res, next) {
         return;
     }
 
-    res.render("detail", { data: profile });
+    res.render("detail", {
+        data: profile,
+        profile : dataMyProfile
+     });
 }
 
-var dataQuestions = [];
-var dataAnswers = [];
 
-function quiz(req, res, next) {
-    db.collection("questions").find().toArray(questions);
-    db.collection("Answers").find().toArray(answers);
+var quizAnswers = [];
+var questionID;
 
-    function questions(err, questionsData) {
+function questionOne(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 1}, question);
+
+    function question(err, data) {
         if (err) {
             next(err);
         } else {
-            res.render("quiz-question", { data: questionsData });
-        }
-        dataQuestions = questionsData;
-    }
-
-    function answers(err, answersData) {
-        if (err) {
-            next(err);
-        } else {
-            dataAnswers = answersData;
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
         }
     }
 }
 
+function questionTwo(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 2}, question);
 
-function questionOne(req, res) {
-    res.render("quiz-question");
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            console.log(data)
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
 }
+
+function questionThree(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 3}, question);
+
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
+}
+
+function questionFour(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 4}, question);
+
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
+}
+
+function questionFive(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 5}, question);
+
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
+}
+
+function questionSix(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 6}, question);
+
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
+}
+
+function questionSeven(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 7}, question);
+
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
+}
+
+function questionEight(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 8}, question);
+
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
+}
+
+function questionNine(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 9}, question);
+
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
+}
+
+function questionTen(req, res, next) {
+    db.collection("questions-answers").findOne(
+        {"questionID": 10}, question);
+
+    function question(err, data) {
+        if (err) {
+            next(err);
+        } else {
+            questionID = data.questionID + 1;
+            res.render("quiz-question", {
+                question : data
+             });
+        }
+    }
+}
+
+function answer(req, res) {
+    quizAnswers.push(req.body.answer)
+    console.log(questionID)
+    if(questionID === 11) {
+        dataMyProfile.antwoorden = quizAnswers
+        req.session.user = dataMyProfile
+        db.collection('users').insertOne(req.session.user, addUser);
+
+        function addUser(err, data) {
+            if (err) {
+            next(err);
+            } else {
+            req.session.user._id = data.insertedId;
+            console.log(req.session.user)
+            }
+
+    }
+        console.log(dataMyProfile)
+        res.redirect("/profiles");
+
+    }else{
+        res.redirect("/question" + questionID);
+    }
+    console.log(questionID);
+    console.log(quizAnswers);
+
+}
+
+function deleteProfile(req, res) {
+    db.collection('users').deleteOne({
+    _id : mongo.ObjectId(req.session.user._id) }, deleteUser);
+
+    function deleteUser(err) {
+      if (err) {
+        next(err);
+      } else {
+        quizAnswers= [];
+        req.session.destroy();
+        res.redirect('/');
+      }
+    }
+  }
+
+  function updateProfile(req, res) {
+    res.render("update", {
+        profile : dataMyProfile
+    });
+}
+
+function update(req, res, next) {
+    db.collection('users').updateOne({
+      _id: mongo.ObjectID(req.session.user._id) },
+      {
+        $set: {
+            naam: req.body.naam,
+            geslacht: req.body.geslacht,
+            voorkeur: req.body.voorkeur,
+            leeftijd: req.body.leeftijd,
+            bio: req.body.bio,
+            profielfoto: req.file.filename,
+        },
+      }, done);
+
+    function done(err) {
+      if (err) {
+        next(err);
+      } else {
+        res.redirect('/my-profile');
+      }
+    }
+  }

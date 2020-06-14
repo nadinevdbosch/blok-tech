@@ -1,0 +1,16 @@
+<%- include ('includes/head') %> <%- include ('includes/header') %>
+
+<div class="profiel-detail-pagina">
+    <h1>Bewerk hier je profiel</h1>
+    <form action="/update-profile" method="post" enctype="multipart/form-data">
+        <input name="naam" value="<%= profile.naam %>">
+        <input name="geslacht" value="<%= profile.geslacht %>">
+        <input name="voorkeur" value="<%= profile.voorkeur %>" />
+        <input name="leeftijd" value="<%= profile.leeftijd %>">
+        <input name="profielfoto" type="file" accept="image/*" value="<%= profile.profielfoto %>" />
+        <textarea name="bio" rows="3"><%= profile.bio %></textarea>
+        <button>Bewerk</button>
+      </form>
+</div>
+
+<%- include ('includes/footer') %>

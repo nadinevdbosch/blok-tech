@@ -1,10 +1,10 @@
-<%- include ('includes/head') %> 
+<%- include ('includes/head') %>
 <%- include ('includes/header') %>
 
 <div class="profiel-detail-pagina">
     <div class="profiel-top-info">
         <div class="profiel-foto">
-            <img src="/images/david.png" alt="">
+            <img src="/uploads/<%= data.profielfoto %>" alt="">
         </div>
         <div class= "profiel-informatie">
             <h2><%= data.naam %></h2>
@@ -21,12 +21,12 @@
         <br>
         <p><%= data.bio %></p>
         <p>
-            <a href="/profiles/">Terug</a>
-            <a href="#">Like <img src="/images/heart-white.png" alt="Like"></a></p>
+            <a href="/profiles/"><button>Terug</button></a>
+            <a href="#"><button>Like <img src="/images/heart-white.png" alt="Like"></button></a></p>
     </div>
 </div>
 
 
 
 <%- include ('includes/footer') %>
-    
+

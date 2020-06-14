@@ -18,12 +18,13 @@
         <p>Op zoek naar een: <%= data.voorkeur %></p>
         <br />
         <p><%= data.bio %></p>
-        <p>
-            <a href="/profiles/">Terug</a>
-            <a href="#"
-                >Like <img src="/images/heart-white.png" alt="Like"
-            /></a>
-        </p>
+        <div>
+            <a href="/profiles/"><button>Terug</button></a>
+            <a href="/my-profile/update"><button>Bewerk</button></a>
+            <form action="/delete-profile" method="POST">
+            <a href="#"><button>Verwijder</button></a>
+            </form>
+        </div>
     </div>
 </div>
 
