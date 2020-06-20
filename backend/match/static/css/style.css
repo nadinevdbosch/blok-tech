@@ -87,6 +87,10 @@ textarea {
     margin-top: 60px;
 }
 
+.setup input::placeholder, .setup textarea::placeholder {
+    color: white;
+}
+
 /* QUIZ QUISTIONS STYLING */
 
 .quiz-questions img {

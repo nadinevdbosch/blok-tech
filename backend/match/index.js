@@ -43,7 +43,7 @@ express()
         saveUninitialized: true,
         secret: process.env.SESSION_SECRET
     }))
-    .get("/profiles", profiles)
+    .get("/profiles", profiles )
     .get("/my-profile", myProfile)
     .get("/", startscreen)
     .post("/my-profile", uploadFile.single("profielfoto"), add)
@@ -65,14 +65,12 @@ express()
     .get("/question10", questionTen)
     .listen(3000, () => console.log("listening at localhost:3000"));
 
-function profiles(req, res) {
-    res.render("list.ejs", { dataProfiles: dataProfiles });
-}
 
 var dataMyProfile;
 
 function add(req, res) {
     if(req.session.user){
+        console.log()
         res.redirect("/profiles");
     }else{
         dataMyProfile = {
@@ -93,14 +91,6 @@ function startscreen(req, res) {
     res.render("index");
 }
 
-
-// function myProfile(req, res) {
-//     console.log(dataMyProfile)
-//     res.render("my-profile", {
-//         data: dataMyProfile,
-//         profile : req.session.user
-//     });
-// }
 
 function myProfile(req, res) {
     db.collection("users").findOne(
@@ -131,21 +121,35 @@ function quizQuestion(req, res) {
 var dataProfiles = [];
 
 function profiles(req, res, next) {
-    db.collection("users").find({"geslacht": "man" }).toArray(done);
 
-    function done(err, profilesData) {
-        if (err) {
-            next(err);
-        } else {
+    db.collection("users").find({"geslacht": req.session.user.voorkeur }).toArray(userData)
+
+        function userData(err, userData){
+            console.log(userData)
+            dataProfiles = userData;
+            for (user = 0; user < userData.length; user++) {
+                var matchPercentage = 0
+                for (i = 0; i < quizAnswers.length; i++) {
+                    if(quizAnswers[i] === userData[user].antwoorden[i]){
+                        matchPercentage += 10
+                    }
+                }
+                console.log('het matchpercentage met ' + userData[user].naam + ' = ' + matchPercentage)
+                dataProfiles[user].matchpercentage= matchPercentage
+                dataProfiles.sort(function(a,b) {
+                    return b.matchpercentage - a.matchpercentage;
+                });
+
+                }
             res.render("list", {
-                data : profilesData,
+                data : dataProfiles,
                 profile : dataMyProfile });
         }
-        dataProfiles = profilesData;
-    }
+
 }
 
 function profile(req, res, next) {
+    console.log(dataProfiles)
     var naam = req.params.naam;
     var profile = find(dataProfiles, function (value) {
         return value.naam === naam;
@@ -337,7 +341,7 @@ function answer(req, res) {
 
         function addUser(err, data) {
             if (err) {
-            next(err);
+            console.log(err);
             } else {
             req.session.user._id = data.insertedId;
             console.log(req.session.user)
@@ -356,7 +360,7 @@ function answer(req, res) {
 }
 
 function deleteProfile(req, res) {
-    db.collection('users').deleteOne({
+    db.collection("users").deleteOne({
     _id : mongo.ObjectId(req.session.user._id) }, deleteUser);
 
     function deleteUser(err) {
@@ -398,3 +402,8 @@ function update(req, res, next) {
       }
     }
   }
+
+
+
+
+

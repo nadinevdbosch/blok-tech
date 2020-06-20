@@ -77,7 +77,7 @@ function add(req, res) {
     leeftijd: req.body.leeftijd,
     bio: req.body.bio
   })
-
+  
   res.redirect('/profiles/' + naam)
 }
 
